@@ -37,7 +37,7 @@ def index_():
     return jsonify(states)
 
 @app.route("/api/state", methods=["POST"])
-def index():
+def api_state():
     state = {}
     for k, v in request.form.lists():
         v = v[0]
