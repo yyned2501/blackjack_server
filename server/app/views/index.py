@@ -7,7 +7,7 @@ states = {}
 
 
 def delete_old_states():
-    for k in states:
+    for k in list(states.keys()):
         if time.time() - states[k]["next_time"] > 20:
             del states[k]
 
