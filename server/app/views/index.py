@@ -35,3 +35,15 @@ def index():
 def index_():
     delete_old_states()
     return jsonify(states)
+
+@app.route("/api/state", methods=["POST"])
+def index():
+    state = {}
+    for k, v in request.form.lists():
+        v = v[0]
+        try:
+            state[k] = int(v)
+        except ValueError:
+            state[k] = v
+    print(state)
+    return jsonify(states)
