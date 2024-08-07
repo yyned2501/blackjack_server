@@ -36,14 +36,13 @@ def index_():
     delete_old_states()
     return jsonify(states)
 
+
 @app.route("/api/state", methods=["POST"])
 def api_state():
-    state = {}
-    for k, v in request.form.lists():
-        v = v[0]
-        try:
-            state[k] = int(v)
-        except ValueError:
-            state[k] = v
-    print(state)
+    data = (request.form.getlist("data"))
+    for k in states:
+        if k in data:
+            states[k]["state"] = 1
+        else:
+            del states[k]["state"]
     return jsonify(states)
