@@ -44,5 +44,6 @@ def api_states():
         if str(k) in data:
             states[k]["state"] = 1
         else:
-            del states[k]["state"]
+            if "state" in states[k]:
+                del states[k]["state"]
     return jsonify(states)
