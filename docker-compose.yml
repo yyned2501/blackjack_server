@@ -1,0 +1,13 @@
+services:
+    server:
+        image: python:3.11
+        volumes:
+            - .:/app
+        environment:
+            - TZ=Asia/Shanghai
+        network_mode: bridge
+        working_dir: /app
+        ports:
+            - 8080:5000
+            - 8081:5001
+        command: ["sh","docker-entrypoint.sh"]
