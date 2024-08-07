@@ -39,7 +39,7 @@ def index_():
 
 @app.route("/api/state", methods=["POST"])
 def api_state():
-    data = (request.form.getlist("data"))
+    data = request.form.getlist("data")
     for k in states:
         if k in data:
             states[k]["state"] = 1
