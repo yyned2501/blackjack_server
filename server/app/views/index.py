@@ -12,7 +12,7 @@ def delete_old_states():
             del states[k]
 
 
-@app.route("/", methods=["POST"])
+# @app.route("/", methods=["POST"])
 @app.route("/api/state", methods=["POST"])
 def index():
     state = {}
@@ -32,7 +32,7 @@ def index():
     return jsonify(states)
 
 
-@app.route("/", methods=["GET"])
+# @app.route("/", methods=["GET"])
 @app.route("/api/state", methods=["GET"])
 def index_():
     delete_old_states()
@@ -44,7 +44,7 @@ def api_states():
     data = request.form.getlist("data")
     user_id = request.form.get("userid", None)
     sleep = int(request.form.get("sleep", 20))
-    
+
     if user_id:
         user_id = int(user_id)
         if user_id not in states:
