@@ -3,7 +3,6 @@ from app.init import app
 from flask import request, jsonify
 import time
 
-states = {'31341': {'next_date': '2024-08-07 18:31:17', 'next_time': 1723026677, 'point': 21, 'sleep': 89, 'state': 1, 'userid': 31341}, '36916': {'next_date': '2024-08-07 18:30:03', 'next_time': 1723026603, 'sleep': 11, 'state': 1, 'userid': 36916}, '39819': {'next_date': '2024-08-07 18:31:16', 'next_time': 1723026676, 'point': 21, 'sleep': 111, 'state': 1, 'userid': 39819}, '40074': {'next_date': '2024-08-07 18:31:12', 'next_time': 1723026672, 'sleep': 101, 'state': 1, 'userid': 40074}}
 states = {}
 
 def delete_old_states():
@@ -11,8 +10,8 @@ def delete_old_states():
         if time.time() - states[k]["next_time"] > 20:
             del states[k]
 
-
 @app.route("/", methods=["POST"])
+@app.route("/api/state", methods=["POST"])
 def index():
     state = {}
     for k, v in request.form.lists():
@@ -32,6 +31,7 @@ def index():
 
 
 @app.route("/", methods=["GET"])
+@app.route("/api/state", methods=["GET"])
 def index_():
     delete_old_states()
     return jsonify(states)
