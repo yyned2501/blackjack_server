@@ -5,10 +5,12 @@ import time
 
 states = {}
 
+
 def delete_old_states():
     for k in list(states.keys()):
         if time.time() - states[k]["next_time"] > 20:
             del states[k]
+
 
 @app.route("/", methods=["POST"])
 @app.route("/api/state", methods=["POST"])
@@ -40,10 +42,25 @@ def index_():
 @app.route("/api/states", methods=["POST"])
 def api_states():
     data = request.form.getlist("data")
+    user_id = request.form.get("userid", None)
+    sleep = int(request.form.get("sleep", 20))
+    
+    if user_id:
+        user_id = int(user_id)
+        if user_id not in states:
+            state = {"userid": user_id, "sleep": sleep}
+            states[user_id] = state
+        state = states[user_id]
+        state["next_time"] = int(time.time()) + state["sleep"]
+        state["next_date"] = datetime.datetime.fromtimestamp(
+            state["next_time"]
+        ).strftime("%Y-%m-%d %H:%M:%S")
+
     for k in states:
         if str(k) in data:
             states[k]["state"] = 1
         else:
             if "state" in states[k]:
                 del states[k]["state"]
+
     return jsonify(states)
