@@ -2,7 +2,7 @@ import datetime
 from app.init import app
 from flask import request, jsonify
 import time
-
+from app.libs import tgbot
 states = {}
 
 
@@ -10,6 +10,7 @@ def delete_old_states():
     for k in list(states.keys()):
         if time.time() - states[k]["next_time"] - states[k].get("sleep", 0) * 2 > 20:
             del states[k]
+            tgbot.telegram_bot(f"客户端{k}已离线")
 
 
 # @app.route("/", methods=["POST"])
