@@ -32,7 +32,7 @@ def index():
         "%Y-%m-%d %H:%M:%S"
     )
     if (point := state.get("point")) <= 21:
-        celery_tasks.tg_message(f'{state.get("userid")}开始钓鱼，点数{point}')
+        celery_tasks.tg_message.delay(f'{state.get("userid")}开始钓鱼，点数{point}')
     states[state["userid"]] = state
     delete_old_states()
     return jsonify(states)
