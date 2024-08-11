@@ -23,6 +23,9 @@ def index():
             state[k] = int(v)
         except ValueError:
             state[k] = v
+    state["update_date"] = datetime.datetime.fromtimestamp(int(time.time())).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
     if "sleep" in state:
         state["next_time"] = int(time.time()) + state["sleep"]
     state["next_date"] = datetime.datetime.fromtimestamp(state["next_time"]).strftime(
