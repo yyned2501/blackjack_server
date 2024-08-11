@@ -31,7 +31,7 @@ def index():
     state["next_date"] = datetime.datetime.fromtimestamp(state["next_time"]).strftime(
         "%Y-%m-%d %H:%M:%S"
     )
-    if (point := state.get("point")) <= 21:
+    if (point := state.get("point")) and (point <= 21):
         celery_tasks.tg_message.delay(
             f'{state.get("userid")}开始钓鱼，点数{point}，魔力{state.get("bonus","未知")}')
     states[state["userid"]] = state
