@@ -1,5 +1,9 @@
 echo starting
 
+apt-get update >/dev/null 2>&1
+apt-get install redis -y >/dev/null 2>&1
+echo "apt-get updated"
+
 pip install --upgrade pip -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com >/dev/null 2>&1
 echo "pip updated"
 

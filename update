@@ -24,5 +24,5 @@ while true; do
     else
         echo "no updates"
     fi
-    sleep 1m
+    sleep 60
 done

@@ -2,3 +2,5 @@ supervisor
 flask
 uwsgi
 requests
+celery
+redis
