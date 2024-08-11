@@ -12,7 +12,6 @@ def delete_old_states():
             del states[k]
             celery_tasks.tg_message(f"客户端{k}已离线")
 
-    
 
 # @app.route("/", methods=["POST"])
 @app.route("/api/state", methods=["POST"])
@@ -32,6 +31,8 @@ def index():
     state["next_date"] = datetime.datetime.fromtimestamp(state["next_time"]).strftime(
         "%Y-%m-%d %H:%M:%S"
     )
+    if (point := state.get("point")) > 21:
+        celery_tasks.tg_message(f'{state.get("userid")}开始钓鱼，点数{point}')
     states[state["userid"]] = state
     delete_old_states()
     return jsonify(states)
