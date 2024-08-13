@@ -52,7 +52,7 @@ def api_states():
     if user_id:
         user_id = int(user_id)
         if user_id not in states:
-            celery_tasks.tg_message.delay(f"客户端{k}回复链接")
+            celery_tasks.tg_message.delay(f"客户端{user_id}回复链接")
             state_json = redis_cli.get(user_id)
             state = (
                 json.loads(state_json)
