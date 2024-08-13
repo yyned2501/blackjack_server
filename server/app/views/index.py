@@ -51,7 +51,6 @@ def api_states():
     if user_id:
         user_id = int(user_id)
         if user_id not in states:
-
             state = (
                 json.loads(state_json)
                 if (state_json := redis_cli.get(user_id))
