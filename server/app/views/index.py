@@ -59,9 +59,7 @@ def api_states():
             )
             states[user_id] = state
             if (
-                time.time()
-                - state.get("next_time", 0)
-                - states[k].get("sleep", 120) * 2
+                time.time() - state.get("next_time", 0) - state.get("sleep", 120) * 2
                 > 20
             ):
                 celery_tasks.tg_message.delay(f"客户端{user_id}恢复链接")
