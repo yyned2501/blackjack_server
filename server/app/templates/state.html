@@ -1,0 +1,10 @@
+{% extends "bootstrap/base.html" %}
+{% block html_attribs %} lang="zh-CN"{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        {% for userid,state in states.items() %}
+        {state}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,5 +1,6 @@
 supervisor
 flask
+flask-Bootstrap
 uwsgi
 requests
 celery

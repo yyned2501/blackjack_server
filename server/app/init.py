@@ -1,7 +1,10 @@
 from flask import Flask
+from flask_bootstrap import Bootstrap  
 from celery import Celery
 import redis
 app = Flask(__name__)
+Bootstrap(app)
+
 celery = Celery(
     app.import_name,
     backend="redis://localhost:6379/1",
