@@ -73,5 +73,6 @@ def api_states():
             if states[k].get("state"):
                 if time.time() - states[k].get("update_time", 0) > 5:
                     del states[k]["state"]
+        redis_cli.set(k, json.dumps(states[k]))
 
     return jsonify(states)
