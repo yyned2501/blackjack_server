@@ -1,19 +1,20 @@
-import datetime
-from app.init import app
+from app.init import app, redis_cli
 from flask import request, jsonify
+import json
 import time
 from app.libs import celery_tasks
+
 states = {}
 
 
 def delete_old_states():
     for k in list(states.keys()):
-        if time.time() - states[k]["next_time"] - states[k].get("sleep", 0) * 2 > 20:
+        if time.time() - states[k]["next_time"] > 20:
+            redis_cli.set(k, json.dumps(states[k]))
             del states[k]
-            celery_tasks.tg_message(f"客户端{k}已离线")
+            celery_tasks.tg_message.delay(f"客户端{k}已离线")
 
 
-# @app.route("/", methods=["POST"])
 @app.route("/api/state", methods=["POST"])
 def index():
     state = {}
@@ -23,17 +24,14 @@ def index():
             state[k] = int(v)
         except ValueError:
             state[k] = v
-    state["update_date"] = datetime.datetime.fromtimestamp(int(time.time())).strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+    state["update_time"] = int(time.time())
+
     if "sleep" in state:
         state["next_time"] = int(time.time()) + state["sleep"]
-    state["next_date"] = datetime.datetime.fromtimestamp(state["next_time"]).strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+
     if (point := state.get("point")) and (point <= 21):
-        celery_tasks.tg_message.delay(
-            f'{state.get("userid")}开始钓鱼，点数{point}，魔力{state.get("bonus","未知")}')
+        celery_tasks.tg_state.delay(state)
+
     states[state["userid"]] = state
     delete_old_states()
     return jsonify(states)
@@ -54,25 +52,23 @@ def api_states():
     if user_id:
         user_id = int(user_id)
         if user_id not in states:
-            state = {"userid": user_id, "sleep": sleep}
+            celery_tasks.tg_message.delay(f"客户端{k}回复链接")
+            state_json = redis_cli.get(user_id)
+            state = (
+                json.loads(state_json)
+                if state_json
+                else {"userid": user_id, "sleep": sleep}
+            )
             states[user_id] = state
         state = states[user_id]
         state["next_time"] = int(time.time()) + state["sleep"]
-        state["next_date"] = datetime.datetime.fromtimestamp(
-            state["next_time"]
-        ).strftime("%Y-%m-%d %H:%M:%S")
 
     for k in states:
         if str(k) in data:
             states[k]["state"] = 1
         else:
-            if "state" in states[k]:
-                del states[k]["state"]
+            if states[k].get("state"):
+                if time.time() - states[k].get("update_time", 0) > 5:
+                    del states[k]["state"]
 
     return jsonify(states)
-
-
-@app.route("/api/test", methods=["GET"])
-def test():
-    celery_tasks.tg_message.delay("测试并发推送")
-    return "OK"
