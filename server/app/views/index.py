@@ -9,8 +9,7 @@ states = {}
 
 def delete_old_states():
     for k in list(states.keys()):
-        if time.time() - states[k]["next_time"] > 20:
-            redis_cli.set(k, json.dumps(states[k]))
+        if time.time() - states[k]["next_time"] - states[k].get("sleep", 120) * 2 > 20:
             del states[k]
             celery_tasks.tg_message.delay(f"客户端{k}已离线")
 
@@ -33,7 +32,7 @@ def index():
         celery_tasks.tg_state.delay(state)
 
     states[state["userid"]] = state
-    delete_old_states()
+    redis_cli.set(state["userid"], json.dumps(state))
     return jsonify(states)
 
 
@@ -52,14 +51,21 @@ def api_states():
     if user_id:
         user_id = int(user_id)
         if user_id not in states:
-            celery_tasks.tg_message.delay(f"客户端{user_id}恢复链接")
-            state_json = redis_cli.get(user_id)
+
             state = (
                 json.loads(state_json)
-                if state_json
+                if (state_json := redis_cli.get(user_id))
                 else {"userid": user_id, "sleep": sleep}
             )
             states[user_id] = state
+            if (
+                time.time()
+                - state.get("next_time", 0)
+                - states[k].get("sleep", 120) * 2
+                > 20
+            ):
+                celery_tasks.tg_message.delay(f"客户端{user_id}恢复链接")
+
         state = states[user_id]
         state["next_time"] = int(time.time()) + state["sleep"]
 
