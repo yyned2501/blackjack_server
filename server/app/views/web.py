@@ -10,7 +10,7 @@ app = Blueprint("web", __name__)
 
 @app.route("/state")
 def state():
-    _states = copy.deepcopy(states)
+    _states = copy.deepcopy({k: states[k] for k in sorted(states)})
     for _, state in _states.items():
         state["next_ts"] = datetime.datetime.fromtimestamp(
             state.get("next_time", 0)
