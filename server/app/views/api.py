@@ -32,7 +32,7 @@ def index():
     if "sleep" in state:
         state["next_time"] = int(time.time()) + state["sleep"]
 
-    if (point := state.get("point")) and (point <= 21):
+    if state.get("gift_model") or ((point := state.get("point")) and (point <= 21)):
         celery_tasks.tg_state.delay(state)
 
     states[state["userid"]] = state
