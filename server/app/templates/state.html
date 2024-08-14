@@ -3,14 +3,16 @@
 
 {% block content %}
 <div class="container-fluid">
-    <table>
+    <table class="table">
         <thead>
-            <th>id</th>
-            <th>魔力</th>
-            <th>点数</th>
-            <th>下勾时间</th>
-            <th>下沟状态</th>
-            <th>汇报时间</th>
+            <tr>
+                <th>id</th>
+                <th>魔力</th>
+                <th>点数</th>
+                <th>下勾时间</th>
+                <th>下沟状态</th>
+                <th>汇报时间</th>
+            </tr>
         </thead>
         <tbody>
             {% for userid,state in states.items() %}
