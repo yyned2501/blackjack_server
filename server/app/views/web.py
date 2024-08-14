@@ -18,4 +18,4 @@ def state():
         state["update_ts"] = datetime.datetime.fromtimestamp(
             state.get("update_time", 0)
         ).strftime("%Y-%m-%d %H:%M:%S")
-    return render_template("state.html", states=states)
+    return render_template("state.html", states=_states)
