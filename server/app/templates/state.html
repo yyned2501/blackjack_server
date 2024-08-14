@@ -8,9 +8,11 @@
             <tr>
                 <th>id</th>
                 <th>魔力</th>
+                <th>下载量</th>
                 <th>点数</th>
                 <th>下勾时间</th>
-                <th>下沟状态</th>
+                <th>下勾状态</th>
+                <th>自助餐模式</th>
                 <th>汇报时间</th>
             </tr>
         </thead>
@@ -19,9 +21,11 @@
             <tr>
                 <td>{{state.userid}}</td>
                 <td>{{state.bonus}}</td>
+                <td>{{state.downloads}}</td>
                 <td>{{state.point}}</td>
                 <td>{{state.update_ts}}</td>
                 <td>{{state.state}}</td>
+                <td>{{state.gift_model}}</td>
                 <td>{{state.next_ts}}</td>
             </tr>
             {% endfor %}
