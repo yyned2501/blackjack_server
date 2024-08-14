@@ -2,9 +2,29 @@
 {% block html_attribs %} lang="zh-CN"{% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
-        {% for userid,state in states.items() %}
-        {state}
-        {% endfor %}
-    </div>
+<div class="container-fluid">
+    <table>
+        <thead>
+            <th>id</th>
+            <th>魔力</th>
+            <th>点数</th>
+            <th>下勾时间</th>
+            <th>下沟状态</th>
+            <th>汇报时间</th>
+        </thead>
+        <tbody>
+            {% for userid,state in states.items() %}
+            <tr>
+                <td>{{state.userid}}</td>
+                <td>{{state.bonus}}</td>
+                <td>{{state.point}}</td>
+                <td>{{state.update_dt| date('%Y-%m-%d %H:%M:%S')}}</td>
+                <td>{{state.state}}</td>
+                <td>{{state.next_dt| date('%Y-%m-%d %H:%M:%S')}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
 {% endblock %}
