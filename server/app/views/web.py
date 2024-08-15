@@ -18,4 +18,5 @@ def state():
         state["update_ts"] = datetime.datetime.fromtimestamp(
             state.get("update_time", 0)
         ).strftime("%Y-%m-%d %H:%M:%S")
+        state["model"] = "自助" if state.get("gift_model") else "钓鱼"
     return render_template("state.html", states=_states)
