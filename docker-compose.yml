@@ -1,6 +1,7 @@
 services:
     server:
         image: python:3.11
+        container_name: blackjack_server
         volumes:
             - .:/app
         environment:
